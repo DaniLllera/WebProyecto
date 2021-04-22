@@ -27,25 +27,25 @@
 </div>
 <div class="top-left">
 
-    <img class="img" id="img-right" src="promotions.png" alt="Italian Trulli">
-  <a  href="FirebaseJS.html" id="button" class="waves-effect waves-light btn">Movie</a>
+    <img class="img" id="img-right" src="palomitas.png" alt="Italian Trulli">
+    <a  href="FirebaseJS.html" id="button" class="waves-effect waves-light btn">Movie</a>
     <a href="OfertasJS.html" class="waves-effect waves-light btn">Promotions</a>
     <a href="ComidaJS.html"  class="waves-effect waves-light btn">Menus</a>
-
 </div>
 
 
 
 
 
-    <table id="promociones" class="collection">
+    <table id="menus" class="collection">
 
     </table>
 
     <div id="form">
         Name <input id="namebox" type="text"></input><br><br>
-        Description <input id="desbox" type="text"></input><br><br>
-        Code <input id="codebox" type="text"></input><br><br>
+        ImageUrl <input id="imgbox" type="text"></input><br><br>
+        <img id="imgpreview">
+
         <br><br>
 
         <div class="buttonbar">
@@ -77,41 +77,39 @@ let firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 
-let promotionsId = "";
+let menussId = "";
 $('insert').onclick = function(){
-    db.collection("Promotions").add({
+    db.collection("Menus").add({
         Name: $('namebox').value,
-        Description: $('desbox').value,
-        Code: $('codebox').value,
+        Img: $('imgbox').value
     });
 
-    listarPromociones();
+    listarMenus();
 }
 
 $('update').onclick = function (){
-    db.collection("Promotions").doc(peliculaId).update({
+    db.collection("Menus").doc(peliculaId).update({
         Name: $('namebox').value,
-        Description: $('desbox').value,
-        Code: $('codebox').value,
+        Img: $('imgbox').value
    });
-   listarPromociones();
+   listarMenus();
 }
 
 $('delete').onclick = function (){
-    db.collection("Promotions").doc(peliculaId).delete().then(() => {
+    db.collection("Menus").doc(peliculaId).delete().then(() => {
         console.log("Document successfully deleted!");
     }).catch((error) => {
         console.error("Error removing document: ", error);
     });
-    listarPromociones();
+    listarMenus();
 }
 
-listarPromociones();
+listarMenus();
 
 
-function listarPromociones() {
-    $('promociones').innerHTML = "";
-    db.collection("Promotions").get().then(peliculas => {
+function listarMenus() {
+    $('menus').innerHTML = "";
+    db.collection("Menus").get().then(peliculas => {
         peliculas.forEach(pelicula => {
 
             let p = pelicula.data();
@@ -122,11 +120,11 @@ function listarPromociones() {
                 console.log(pelicula.id);
                 peliculaId = pelicula.id;
                 $('namebox').value = p.Name;
-                $('desbox').value = p.Description;
-                $('codebox').value = p.Code;
+                $('imgbox').value = p.Img;
+           
             }
 
-            $('promociones').appendChild(tr);
+            $('menus').appendChild(tr);
         });
     });
 }
